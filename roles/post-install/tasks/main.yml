@@ -1,0 +1,65 @@
+---
+# tasks file for post-install
+    - name: Install packages on RedHat
+      yum:
+        name: "{{item}}"
+        state: present
+      loop:
+        - epel-release
+        - wget
+        - unzip
+        - git
+        - nginx
+      when: ansible_os_family=="RedHat"
+    - name: Install packages on Ubuntu
+      apt:
+        update_cache: yes
+        name: "{{item}}"
+        state: present
+      loop:
+        - wget
+        - unzip
+        - git
+        - nginx
+      when: ansible_os_family=="Debian"
+
+    - name: Copy html files to Centos
+      template:
+        src: index.j2
+        dest: /usr/share/nginx/html/index.html
+      when: ansible_os_family=="RedHat"
+      notify:
+        - restart nginx
+
+    - name: Copy html files to Ubntu
+      template:
+        src: index.j2
+        dest: /var/www/html/index.nginx-debian.html
+      when: ansible_os_family=="Debian"
+      notify:
+        - restart nginx
+
+    - name: create directory on remote machine
+      file:
+        path: /opt/data
+        state: directory
+        mode: "0644"
+
+    - name: copy tar file to data directory
+      copy:
+        src: datafiles.tar.gz
+        dest: /opt/data/
+        mode: "0644"
+
+    - name: unarchieve tar files
+      unarchive:
+        src: /opt/data/datafiles.tar.gz
+        dest: /opt/data/
+        remote_src: yes
+      register: status
+
+    - name: delete tat files
+      file:
+        path: /opt/data/datafiles.tar.gz
+        state: absent
+      when: status.changed

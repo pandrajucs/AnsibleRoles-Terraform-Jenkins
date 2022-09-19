@@ -1,0 +1,6 @@
+---
+- name: Post-Install softwares
+  hosts: all
+  become: true
+  roles:
+    - post-install

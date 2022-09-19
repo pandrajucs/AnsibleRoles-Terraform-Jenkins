@@ -1,0 +1,8 @@
+---
+# vars file for post-install
+custom_heading: "Ansible-Playbook"
+todays_date: "{{ansible_facts['date_time']['date']}}"
+host_name: "{{ansible_facts['hostname']}}"
+ipv4_address: "{{ansible_facts['default_ipv4']['address']}}"
+os_family: "{{ansible_facts['os_family']}}"
+os_version: "{{ansible_facts['default_ipv4']['address']}}"
