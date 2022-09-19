@@ -53,7 +53,7 @@ pipeline{
                 }
             }
             steps{
-                ansiblePlaybook become: true, credentialsId: 'ansible-admin', inventory: 'inventory', playbook: 'play.yml'
+                ansiblePlaybook become: true, credentialsId: 'ansible', inventory: 'inventory', playbook: 'play.yml'
             }
         }
     }
